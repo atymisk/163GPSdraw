@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/radioButton1"
         android:layout_below="@+id/radioButton1"
-        android:onClick="color2"
         android:text="" />
 
     <RadioButton
@@ -23,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/radioButton2"
         android:layout_below="@+id/radioButton2"
-        android:onClick="color3"
         android:text="" />
 
     <RadioButton
@@ -32,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/radioButton3"
         android:layout_below="@+id/radioButton3"
-        android:onClick="color4"
         android:text="" />
 
     <EditText
@@ -73,7 +70,6 @@
         android:layout_alignLeft="@+id/textView3"
         android:layout_below="@+id/textView3"
         android:layout_marginTop="39dp"
-        android:onClick="color1"
         android:text="" />
 
     <Button
@@ -83,7 +79,6 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/radioButton4"
         android:layout_marginTop="15dp"
-        android:onClick="upload"
         android:text="" />
 
     <Button
@@ -93,7 +88,6 @@
         android:layout_alignLeft="@+id/editText2"
         android:layout_alignTop="@+id/button1"
         android:layout_marginTop="36dp"
-        android:onClick="penClick"
         android:text="" />
 
 </RelativeLayout>
