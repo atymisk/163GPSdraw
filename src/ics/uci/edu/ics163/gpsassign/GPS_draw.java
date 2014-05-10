@@ -1,8 +1,18 @@
 package ics.uci.edu.ics163.gpsassign;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
+
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.IntentSender;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +23,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.os.Build;
 
-public class GPS_draw extends Activity {
-
+public class GPS_draw extends Activity implements 
+	GooglePlayServicesClient.ConnectionCallbacks,
+	GooglePlayServicesClient.OnConnectionFailedListener,
+	LocationListener {
+	LocationClient mLocationClient = new LocationClient(this,this,this);
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,8 +40,39 @@ public class GPS_draw extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		
+		
+		
 	}
+	
+	private String lastLocation;
 
+	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+	
+	public static class ErrorDialogFragment extends DialogFragment 
+	{
+		private Dialog mDialog;
+		
+		public ErrorDialogFragment()
+		{
+				super();
+				mDialog = null;
+		}
+		
+		public void setDialog(Dialog dialog)
+		{
+			mDialog = dialog;
+		}
+		public Dialog onCreateDialog(Bundle savedInstanceState)
+		{
+			return mDialog;
+		}
+	}
+	
+
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -53,6 +98,7 @@ public class GPS_draw extends Activity {
 	 */
 	public static class PlaceholderFragment extends Fragment {
 		
+		public static TextView locationView;
 		private boolean p = false;
 		public PlaceholderFragment() {
 		}
@@ -142,6 +188,20 @@ public class GPS_draw extends Activity {
 		}
 	}
 	
+	private void updateUI()
+	{
+		runOnUiThread(new Runnable(){
+			@Override
+			public void run()
+			{
+				if(PlaceholderFragment.locationView != null && lastLocation != null)
+				{
+					PlaceholderFragment.locationView.setText(lastLocation);
+				}
+			}
+		});
+	}
+	
 	public static void penClick(View v, boolean pen)
 	{
 		if(pen)
@@ -176,5 +236,75 @@ public class GPS_draw extends Activity {
 	{
 		System.out.println("derp");
 		Log.v("CLICKED", "derp");
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) 
+	{
+		if (result.hasResolution())
+		{
+			try 
+			{
+				result.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+				
+			}
+			catch (IntentSender.SendIntentException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+			
+			if (errorDialog != null)
+			{
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(errorDialog);
+				errorFragment.show(getFragmentManager(), "Location Updates");
+			}
+		}
+		
+		
+		
+	}
+
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		Toast.makeText(this, "Connected",Toast.LENGTH_SHORT).show();
+		
+		Location mCurrentLocation = mLocationClient.getLastLocation();
+		lastLocation = "("+mCurrentLocation.getLatitude()+","+mCurrentLocation.getLongitude()+")";
+		updateUI();
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+		
 	}
 }
