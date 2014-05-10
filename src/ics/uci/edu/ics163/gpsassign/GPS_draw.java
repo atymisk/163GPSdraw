@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,8 +69,9 @@ public class GPS_draw extends Activity {
 				@Override
 				public void onClick(View arg0) 
 				{
-					
+					System.out.println("Clicked");
 				}
+				
 			});;
 			
 			Button up = (Button)rootView.findViewById(R.id.button1);
@@ -113,6 +115,7 @@ public class GPS_draw extends Activity {
 				{
 					color2(arg0);
 				}
+				
 			});
 			
 			RadioButton c3 = (RadioButton)rootView.findViewById(R.id.radioButton3);
@@ -150,24 +153,28 @@ public class GPS_draw extends Activity {
 	public static void upload(View v)
 	{
 		System.out.println("uploaded");
+		Log.v("CLICKED", "uploaded");
 	}
 	
 	public static void color1(View v)
 	{
-		System.out.println("red");	
+		Log.v("CLICKED", "red");	
 	}
 	public static void color2(View v)
 	{
 		System.out.println("green");
+		Log.v("CLICKED", "green");
 	}
 	
 	public static void color3(View v)
 	{
 		System.out.println("blue");
+		Log.v("CLICKED", "blue");
 	}
 	
 	public static void color4(View v)
 	{
 		System.out.println("derp");
+		Log.v("CLICKED", "derp");
 	}
 }
